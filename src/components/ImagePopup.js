@@ -1,6 +1,7 @@
 function ImagePopup(props) {
+  if (!props.card) return null;
   return ( 
-  <div className={props.card ? `popup  popup_type_${props.name} popup_opened` : `popup popup_type_${props.name}`}>
+  <div className={props.card ? `popup popup_opened` : `popup`}>
     <figure className="popup__view-card">
       <button className="popup__close" 
         onClick={props.onClose} 

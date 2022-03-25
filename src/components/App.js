@@ -11,7 +11,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] =  useState(false);
+  const [selectedCard, setSelectedCard] =  useState(null);
  
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -33,7 +33,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard(null);
   }
 
   return (
@@ -50,12 +50,11 @@ function App() {
         title="Редактировать профиль" 
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
-        buttonText="Сохранить"
     >
-        <input className="popup__input popup__input_el_name" id="name-input" name="name" type="text" required
+        <input className="popup__input popup__input_el_name" id="name-input" name="name" type="text" required placeholder="Имя"
         minLength="2" maxLength="40" />
         <span className="popup__error" id="name-input-error"></span>
-        <input className="popup__input popup__input_el_job" id="job-input" name="about" type="text" required minLength="2"
+        <input className="popup__input popup__input_el_job" id="job-input" name="about" type="text" required minLength="2" placeholder="О себе"
         maxLength="200" />
         <span className="popup__error" id="job-input-error"></span>
     </PopupWithForm>
@@ -65,7 +64,6 @@ function App() {
         title="Обновить аватар" 
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
-        buttonText="Сохранить"
     >
         <input className="popup__input popup__input_el_link" id="avatar-input" name="link" type="url" required
         placeholder="Ссылка на картинку" />
