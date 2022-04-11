@@ -21,7 +21,30 @@ class Api {
     })
       .then(res => this._getResponseData(res))
   }
-/* 
+
+  changeLikeCardStatus(id, isLiked) {
+    const method = isLiked ? 'DELETE' : 'PUT';
+    return fetch(`${this.address}/cards/${id}/likes`, {
+      method,
+      headers: {
+        authorization: this.token,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => this._getResponseData(res))
+  }
+
+    deleteCard(id) {
+    return fetch(`${this.address}/cards/${id}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: this.token,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => this._getResponseData(res))
+  }
+
   editProfile(data) {
     return fetch(`${this.address}/users/me`, {
       method: 'PATCH',
@@ -68,39 +91,6 @@ class Api {
     )
       .then(res => this._getResponseData(res))
   }
-
-  deleteCard(data) {
-    return fetch(`${this.address}/cards/${data._id}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this.token,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => this._getResponseData(res))
-  }
-
-  addLike(data) {
-    return fetch(`${this.address}/cards/${data._id}/likes`, {
-      method: 'PUT',
-      headers: {
-        authorization: this.token,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => this._getResponseData(res))
-  }
-
-  deleteLike(data) {
-    return fetch(`${this.address}/cards/${data._id}/likes`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this.token,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => this._getResponseData(res))
-  } */
 
   _getResponseData(res) {
     if (!res.ok) {
