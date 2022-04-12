@@ -1,23 +1,28 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
+import { pattern } from "../utils/constants";
+import { adressErrorText } from "../utils/constants";
 
 function EditAvatarPopup({onUpdateAvatar, isOpen, onClose, renderLoading, buttonText}) {
-  const [value, setValue] = React.useState();
   const linkRef = React.useRef();
+  const [value, setValue] = React.useState();
   const [isValid, setIsValid] = React.useState(false);
-  const [url, setUrl] = React.useState('');
-  const pattern = /https/;
+  const [linkErrorText, setLinkErrorText] = React.useState('');
 
   React.useEffect(() => {
     !pattern.test(value) ? setIsValid(false) : setIsValid(true)
-  }, [pattern, value])
+  }, [value])
 
- 
+  React.useEffect(()=>{
+    linkRef.current.value = '';
+    setIsValid(true);
+  },[isOpen]);
+
   function showErrorLink() {
     if(!pattern.test(value)) {
-      setUrl('Введите адрес сайта.')
+      setLinkErrorText(adressErrorText)
     } else {
-      setUrl('')
+      setLinkErrorText('')
     }
   }
 
@@ -35,10 +40,6 @@ function EditAvatarPopup({onUpdateAvatar, isOpen, onClose, renderLoading, button
       return (buttonText=title)})
   } 
 
-  React.useEffect(()=>{
-    linkRef.current.value = '';
-  },[isOpen]);
-
   return (
     <PopupWithForm 
       name="avatar" 
@@ -47,8 +48,9 @@ function EditAvatarPopup({onUpdateAvatar, isOpen, onClose, renderLoading, button
       onClose={onClose}
       onSubmit={handleSubmit}
       buttonText={buttonText}
-    >
-      <input className={isValid ? `popup__input popup__input_el_link` : `popup__input popup__input_type_error popup__input_el_link`}
+    > 
+      <input 
+        className={`popup__input popup__input_el_link ${!isValid && 'popup__input_type_error'}`}
         value={value||''} 
         id="avatar-input" 
         name="link" 
@@ -58,10 +60,11 @@ function EditAvatarPopup({onUpdateAvatar, isOpen, onClose, renderLoading, button
         ref={linkRef} 
         onChange={handleChange} 
       />
-      <span className="popup__error"
+      <span 
+        className={`popup__error ${!isValid && 'popup__error_visible'}`}
         id="avatar-input-error"
         value={linkRef.value}>
-        {url}
+        {linkErrorText}
       </span>
    </PopupWithForm>
 )

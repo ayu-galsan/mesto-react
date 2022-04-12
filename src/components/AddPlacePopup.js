@@ -1,29 +1,34 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
+import { pattern } from "../utils/constants";
+import { lengthErrorText } from "../utils/constants";
+import { adressErrorText } from "../utils/constants";
 
 function AddPlacePopup({onAddPlace, renderLoading, buttonText, isOpen, onClose}) {
   const [place, setPlace] = React.useState('');
   const [link, setlink] = React.useState('');
   const [isValid, setIsValid] = React.useState(false);
   const [errorText, setErrorText] = React.useState('');
-  const [url, setUrl] = React.useState('');
-  const pattern = /https/;
-
+  const [linkErrorText, setlinkErrorText] = React.useState('');
   
   React.useEffect(() => {
-    (place.length < 1 || place.length > 30) || !pattern.test(link) ? setIsValid(false) : setIsValid(true)
+    (place.length < 1 || place.length > 30) ||
+    !pattern.test(link) ?
+      setIsValid(false) :
+      setIsValid(true)
   }, [place, link])
 
   React.useEffect(() => {
     setPlace('');
     setlink(''); 
+    setIsValid(true);
     setErrorText('');
-    setUrl('') 
+    setlinkErrorText('') 
   }, [isOpen]);
 
   function showErrorPlace() {
     if (place.length < 1) {
-      setErrorText('Минимальное количество символов: 2. Длина текста сейчас: 1 символ.')
+      setErrorText(lengthErrorText)
     } else {
       setErrorText('');
     }
@@ -31,9 +36,9 @@ function AddPlacePopup({onAddPlace, renderLoading, buttonText, isOpen, onClose})
 
   function showErrorLink() {
     if(!pattern.test(link)) {
-      setUrl('Введите адрес сайта.')
+      setlinkErrorText(adressErrorText)
     } else {
-      setUrl('')
+      setlinkErrorText('')
     }
   }
 
@@ -44,7 +49,7 @@ function AddPlacePopup({onAddPlace, renderLoading, buttonText, isOpen, onClose})
 
   function handleChangeLink(evt) {
     setlink(evt.target.value);
-    showErrorLink() 
+    showErrorLink();
   }
 
   function handleSubmit(evt) {
@@ -58,7 +63,6 @@ function AddPlacePopup({onAddPlace, renderLoading, buttonText, isOpen, onClose})
     })
   } 
 
-
   return (
     <PopupWithForm 
       name="add" 
@@ -68,7 +72,8 @@ function AddPlacePopup({onAddPlace, renderLoading, buttonText, isOpen, onClose})
       buttonText={buttonText}
       onSubmit={handleSubmit}
     >
-      <input className={isValid ? `popup__input popup__input_el_place` : `popup__input popup__input_type_error popup__input_el_place`}
+      <input
+        className={`popup__input popup__input_el_place ${!isValid && 'popup__input_type_error'}`}
         id="place-input" 
         name="place" 
         type="text" 
@@ -78,13 +83,15 @@ function AddPlacePopup({onAddPlace, renderLoading, buttonText, isOpen, onClose})
         minLength="2" maxLength="30"
         onChange={handleChangePlace} 
       />
-      <span className={isValid ? `popup__error` : `popup__error popup__error_visible`} 
+      <span
+        className={`popup__error ${!isValid && 'popup__error_visible'}`}
         id="place-input-error" 
         value={place.value} 
         onChange={showErrorPlace}>
           {errorText}
       </span>
-      <input className= {isValid ? `popup__input popup__input_el_link` : `popup__input popup__input_type_error popup__input_el_link`}
+      <input
+        className= {`popup__input popup__input_el_link ${!isValid && 'popup__input_type_error'}`}
         id="url-input" 
         name="link"
         type="url" 
@@ -93,11 +100,12 @@ function AddPlacePopup({onAddPlace, renderLoading, buttonText, isOpen, onClose})
         placeholder="Ссылка на картинку" 
         onChange={handleChangeLink} 
       />
-      <span className={isValid ? `popup__error` : `popup__error popup__error_visible`}
+      <span 
+        className={`popup__error ${!isValid && 'popup__error_visible'}`}
         id="url-input-error"
         value={link.value} 
         onChange={showErrorLink}> 
-          {url}
+          {linkErrorText}
       </span>
     </PopupWithForm>
   )
